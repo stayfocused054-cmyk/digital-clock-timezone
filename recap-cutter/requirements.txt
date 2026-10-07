@@ -1,0 +1,2 @@
+# Basic mode (sirf ye + ffmpeg kaafi hai)
+numpy>=1.24

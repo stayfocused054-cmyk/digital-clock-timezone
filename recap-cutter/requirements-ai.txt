@@ -1,0 +1,8 @@
+# Full accuracy mode. GPU (NVIDIA) ho to pehle CUDA wala torch install karo:
+#   https://pytorch.org/get-started/locally/
+-r requirements.txt
+faster-whisper>=1.0        # audio -> exact line timing
+sentence-transformers>=2.7 # CLIP visual matching + Hindi/English dialogue matching
+pillow>=10
+edge-tts>=6.1              # sirf script ho to free AI voice
+anthropic>=1.0             # --ai : Claude se timestamps (API key chahiye)

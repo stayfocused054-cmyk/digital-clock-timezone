@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "recapcut"
+version = "0.1.0"
+description = "Narration (script / AI voice) ke hisaab se movie me se clips kaat kar recap video banata hai"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24"]
+
+[project.optional-dependencies]
+ai = [
+    "faster-whisper>=1.0",
+    "sentence-transformers>=2.7",
+    "pillow>=10",
+    "edge-tts>=6.1",
+    "anthropic>=1.0",
+]
+test = ["pytest>=7"]
+
+[project.scripts]
+recapcut = "recapcut.cli:main"
+
+[tool.setuptools]
+packages = ["recapcut"]

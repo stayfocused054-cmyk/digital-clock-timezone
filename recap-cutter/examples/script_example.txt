@@ -1,0 +1,11 @@
+# Ye ek example script hai. '#' wali lines ignore hoti hain.
+# Har sentence ek alag line ya ek hi line me . ! ? । se alag karo.
+# [hh:mm:ss] ya [mm:ss] lagane par us line ki clip movie ke usi time ke aas paas se aayegi.
+# [mm:ss-mm:ss] range bhi de sakte ho. Hints optional hain - jahan tool galti kare wahin lagao.
+
+Raju ek chhote se gaon me apni maa ke saath rehta hai.
+Ek din usse Mumbai se ek ajeeb chitthi milti hai.
+[00:25:10] Station par uski mulaqat Meera se hoti hai.
+Lekin Inspector Vikram pehle se uska peecha kar raha hota hai!
+[01:48:00-01:50:30] Climax me Raju aur villain godown me aamne saamne aate hain.
+Aur yahin se kahani palat jaati hai.
