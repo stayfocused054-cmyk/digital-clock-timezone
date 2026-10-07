@@ -36,6 +36,7 @@ script.txt + voice.mp3 + movie.mp4 (+ movie.srt)  ──►  recap.mp4  +  plan.
 ```bash
 pip install -r requirements.txt        # basic mode
 pip install -r requirements-ai.txt     # full accuracy (Whisper + CLIP + AI voice + Claude)
+pip install -r requirements-app.txt    # browser app
 python -m recapcut check               # kya kya chalu hai, dikhata hai
 ```
 
@@ -44,7 +45,24 @@ NVIDIA GPU ho to `requirements-ai.txt` se pehle CUDA wala torch install karo
 jisme movie aur PC ke hisaab se 10-30 minute lag sakte hain. Uske baad wahi movie cache se
 turant chalti hai.
 
-## Use
+## App (sabse aasaan tareeka)
+
+**Windows:** `Start-App.bat` par double-click karo.
+**Mac / Linux:** `./start_app.sh` chalao.
+
+Pehli baar packages install honge. Phir browser me **http://127.0.0.1:7860** khulega:
+
+1. Movie upload karo (ya badi file ho to uska path paste karo, jaise `D:\Movies\movie.mkv`)
+2. Subtitles `.srt` daalo (optional, par accuracy badhti hai)
+3. Apni AI voice ka audio daalo aur script paste karo
+4. **🎬 Video Banao** dabao, progress live dikhega, video wahin play hogi
+5. Neeche table me koi clip galat lage to uska `movie_time` badlo aur **🔁 dobara render** dabao
+
+Videos `~/recapcut_output/` (Windows: `C:\Users\<naam>\recapcut_output`) me save hoti hain.
+Command line se: `python -m recapcut app`. Phone par kholna ho to `python -m recapcut app --share`
+(temporary public link banata hai; movie aapke PC par hi process hoti hai).
+
+## Command line se use
 
 ### 1) Aapki script + aapki AI voice (recommended)
 

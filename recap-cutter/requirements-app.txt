@@ -1,0 +1,3 @@
+# Browser app (python -m recapcut app)
+-r requirements.txt
+gradio>=6

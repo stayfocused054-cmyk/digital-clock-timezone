@@ -158,6 +158,16 @@ class ClipVisual:
 
 
 def file_key(path: Path, extra: str = "") -> str:
-    st = path.stat()
-    return hashlib.sha1(f"{path.resolve()}|{st.st_size}|{st.st_mtime}|{extra}".encode()).hexdigest()[:16]
-
+    """Identifies a file by its size and a sample of its bytes, so the same movie hits the
+    cache even when it is copied, renamed or uploaded again."""
+    size = path.stat().st_size
+    h = hashlib.sha1(f"{size}|{extra}".encode())
+    chunk = 4 * 1024 * 1024
+    with path.open("rb") as f:
+        h.update(f.read(chunk))
+        if size > 2 * chunk:
+            f.seek(size // 2)
+            h.update(f.read(chunk))
+            f.seek(-chunk, 2)
+            h.update(f.read(chunk))
+    return h.hexdigest()[:16]

@@ -53,10 +53,9 @@ def transcribe(
     initial_prompt: str | None,
     log: Callable[[str], None] = print,
 ) -> tuple[list[Word], list[Segment]]:
-    key = hashlib.sha1(
-        f"{audio.resolve()}|{audio.stat().st_size}|{audio.stat().st_mtime}|{language}|"
-        f"{model_size}|{initial_prompt}".encode()
-    ).hexdigest()[:16]
+    from .embed import file_key
+
+    key = file_key(audio, f"{language}|{model_size}|{initial_prompt}")
     cache = cache_dir / f"whisper_{key}.json"
     if cache.exists():
         data = json.loads(cache.read_text(encoding="utf-8"))

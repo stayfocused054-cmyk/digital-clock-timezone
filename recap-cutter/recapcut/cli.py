@@ -1,4 +1,4 @@
-"""Command line: `python -m recapcut make ...`, `render`, `check`."""
+"""Command line: `python -m recapcut make ...`, `render`, `app`, `check`."""
 
 from __future__ import annotations
 
@@ -17,8 +17,14 @@ from .script import parse_script
 from .subtitles import Cue, load_subtitles, text_between, write_srt
 
 
+# Extra listeners (the web app shows progress through this).
+log_sinks: list = []
+
+
 def log(msg: str) -> None:
     print(msg, flush=True)
+    for sink in log_sinks:
+        sink(msg)
 
 
 def default_cache_dir() -> Path:
@@ -97,6 +103,12 @@ def load_scenes(movie: Path, info: media.MediaInfo, cache_dir: Path, threshold: 
 # --------------------------------------------------------------------------- make
 
 def cmd_make(args) -> int:
+    run_make(args)
+    return 0
+
+
+def run_make(args) -> tuple[Path, Path | None]:
+    """Builds the plan (and the video unless --plan-only). Returns (plan.csv, video or None)."""
     media.require_ffmpeg()
     movie = Path(args.movie)
     if not movie.exists():
@@ -201,10 +213,10 @@ def cmd_make(args) -> int:
         f"`python -m recapcut render --plan \"{plan_csv}\" --out \"{out}\"` chalao.)")
 
     if args.plan_only:
-        return 0
+        return plan_csv, None
     render(plan, out, workdir, render_options(args), log)
     log(f"\nHo gaya! Video: {out.resolve()}")
-    return 0
+    return plan_csv, out
 
 
 def render_options(args) -> RenderOptions:
@@ -219,6 +231,15 @@ def cmd_render(args) -> int:
     workdir = Path(args.workdir) if args.workdir else Path(args.plan).resolve().parent
     render(plan, out, workdir, render_options(args), log)
     log(f"\nHo gaya! Video: {out.resolve()}")
+    return 0
+
+
+def cmd_app(args) -> int:
+    try:
+        from .app import launch
+    except ImportError:
+        raise SystemExit("App ke liye gradio chahiye: pip install -r requirements-app.txt")
+    launch(port=args.port, share=args.share, open_browser=not args.no_browser)
     return 0
 
 
@@ -312,6 +333,13 @@ def build_parser() -> argparse.ArgumentParser:
     rd.add_argument("--out", default="recap.mp4")
     add_render_args(rd)
     rd.set_defaults(func=cmd_render)
+
+    app = sub.add_parser("app", help="browser wala app kholo (http://127.0.0.1:7860)")
+    app.add_argument("--port", type=int, default=7860)
+    app.add_argument("--share", action="store_true",
+                     help="temporary public link bhi banao (phone se kholne ke liye)")
+    app.add_argument("--no-browser", action="store_true")
+    app.set_defaults(func=cmd_app)
 
     ck = sub.add_parser("check", help="kaun se features available hain")
     ck.set_defaults(func=cmd_check)
